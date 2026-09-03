@@ -27,7 +27,7 @@ local whitelist = {
     ["bestwars17"] = true,
     ["ie_vke"] = true,
     ["IJNBJSEIJGJ"] = true, 
-    [""] = true,
+    ["evil_1k"] = true,
     [""] = true,
     [""] = true,
     [""] = true,
@@ -401,11 +401,22 @@ end)
 
     if state then
         spawn(function()
-            while _G.AutoSpinWheel and task.wait(0.1) do
-                game:GetService("ReplicatedStorage").rEvents.openFortuneWheelRemote:InvokeServer(
-                    "openFortuneWheel",
-                    game:GetService("ReplicatedStorage").fortuneWheelChances["Fortune Wheel"]
-                )
+            while _G.AutoSpinWheel do
+                pcall(function()
+                    game:GetService("ReplicatedStorage")
+                        .rEvents
+                        :WaitForChild("openFortuneWheelRemote")
+                        :InvokeServer(
+                            "openFortuneWheel",
+                            game:GetService("ReplicatedStorage")
+                                :WaitForChild("shared")
+                                :WaitForChild("catalogs")
+                                :WaitForChild("fortuneWheelChances")
+                                :WaitForChild("Fortune Wheel")
+                        )
+                end)
+
+                task.wait(1)
             end
         end)
     end
